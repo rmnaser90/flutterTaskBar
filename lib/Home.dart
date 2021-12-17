@@ -2,15 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:taskapp/Task.dart';
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+  const MyHomePage(
+      {Key? key,
+      required this.title,
+      required this.navigate,
+      required this.taskList})
+      : super(key: key);
+  final Function navigate;
   final String title;
+  final List<Task> taskList;
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
   TextEditingController newTask = TextEditingController();
-  late List<Task> taskList = [];
+
   // Task hardTask = const Task(title: 'Create a new Flutter App');
   @override
   Widget build(BuildContext context) {
@@ -35,16 +42,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: Scaffold(
           appBar: AppBar(
-            actions: [
-              IconButton(
-                  onPressed: () {
-                    Task task = new Task(title: newTask.text);
-                    newTask.clear();
-                    taskList.add(task);
-                    setState(() {});
-                  },
-                  icon: Icon(Icons.add))
-            ],
+            actions: [IconButton(onPressed: () {}, icon: Icon(Icons.add))],
             title: Container(
               width: double.infinity,
               height: 50,
@@ -61,13 +59,14 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
           body: Column(
-            children: taskList,
-            
+            children: widget.taskList,
           ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          widget.navigate('newTask');
+        },
         tooltip: 'Add Task',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.

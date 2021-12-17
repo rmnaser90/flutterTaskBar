@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 class NewTaskForm extends StatefulWidget {
-  NewTaskForm({Key? key}) : super(key: key);
+  const NewTaskForm({Key? key, required this.navigate, required this.addTask})
+      : super(key: key);
+  final Function navigate;
+  final Function addTask;
 
   @override
   _NewTaskFormState createState() => _NewTaskFormState();
@@ -12,6 +15,7 @@ class _NewTaskFormState extends State<NewTaskForm> {
   TextEditingController titleController = TextEditingController();
   String prevText = '';
   bool isFormComplete = false;
+  int selectPriority = 1;
   @override
   Widget build(BuildContext context) {
     Function checkForm = () {
@@ -110,40 +114,74 @@ class _NewTaskFormState extends State<NewTaskForm> {
               ]),
             ),
           ),
-          Container(
-            width: double.infinity,
-            height: 60,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text('Priority: '),
-                Container(
-                    child: Row(children: [
-                  Text('1'),
-                  Radio(value: 1, groupValue: 2, onChanged: (value) {}),
-                ])),
-                Container(
-                    child: Row(children: [
-                  Text('2'),
-                  Radio(value: 1, groupValue: 2, onChanged: (value) {}),
-                ])),
-                Container(
-                    child: Row(children: [
-                  Text('3'),
-                  Radio(value: 1, groupValue: 2, onChanged: (value) {}),
-                ])),
-                Container(
-                    child: Row(children: [
-                  Text('4'),
-                  Radio(value: 1, groupValue: 2, onChanged: (value) {}),
-                ])),
-                Container(
-                    child: Row(children: [
-                  Text('5'),
-                  Radio(value: 1, groupValue: 2, onChanged: (value) {}),
-                ]))
-              ],
+          Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Container(
+              width: double.infinity,
+              height: 60,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text('Priority: '),
+                  Container(
+                      child: Row(children: [
+                    Text('1'),
+                    Radio(
+                        value: 1,
+                        groupValue: selectPriority,
+                        onChanged: (value) {
+                          selectPriority = 1;
+                          setState(() {});
+                        }),
+                  ])),
+                  Container(
+                      child: Row(children: [
+                    Text('2'),
+                    Radio(
+                        value: 2,
+                        groupValue: selectPriority,
+                        onChanged: (value) {
+                          selectPriority = 2;
+                          setState(() {});
+                        }),
+                  ])),
+                  Container(
+                      child: Row(children: [
+                    Text('3'),
+                    Radio(
+                        value: 3,
+                        groupValue: selectPriority,
+                        onChanged: (value) {
+                          selectPriority = 3;
+                          setState(() {});
+                        }),
+                  ])),
+                  Container(
+                      child: Row(children: [
+                    Text('4'),
+                    Radio(
+                        value: 4,
+                        groupValue: selectPriority,
+                        onChanged: (value) {
+                          selectPriority = 4;
+                          setState(() {});
+                        }),
+                  ])),
+                  Container(
+                      child: Row(children: [
+                    Text('5'),
+                    Radio(
+                      value: 5,
+                      groupValue: selectPriority,
+                      onChanged: (value) {
+                        selectPriority = 5;
+                        setState(() {});
+                      },
+                    ),
+                  ]))
+                ],
+              ),
             ),
           ),
           Padding(
@@ -163,8 +201,11 @@ class _NewTaskFormState extends State<NewTaskForm> {
                       child: ElevatedButton(
                         onPressed: () {
                           if (isFormComplete) {
-                            // add new task to the list
-                            // go back to home page
+                            widget.addTask(
+                                titleController.text,
+                                descriptionController.text,
+                                selectPriority);
+                            widget.navigate('home');
                           }
                         },
                         child: Text('Save'),
@@ -182,7 +223,9 @@ class _NewTaskFormState extends State<NewTaskForm> {
                       width: 120,
                       height: 50,
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          widget.navigate('home');
+                        },
                         child: Text('Cancel'),
                         style: ButtonStyle(
                           backgroundColor:
